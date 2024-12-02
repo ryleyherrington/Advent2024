@@ -30,6 +30,12 @@ struct AdventTabView: View {
                     }
             }
             .tint(.green)
+
+            VStack {
+                Spacer()
+                ChristmasLightView()
+                    .offset(y: -44)
+            }
         }
     }
 }

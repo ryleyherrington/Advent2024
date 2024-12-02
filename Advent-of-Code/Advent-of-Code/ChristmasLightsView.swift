@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChristmasLightView: View {
-    @State private var isGlowing = false
+    @State private var isGlowing = true
     
     let colors: [Color] = [.red, .green, .blue, .yellow, .pink]
     let bulbWidth: CGFloat = 14
@@ -16,8 +16,8 @@ struct ChristmasLightView: View {
     let spacing: CGFloat = 22
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
+        ZStack {
+            GeometryReader { geometry in
                 // String line
                 Path { path in
                     path.move(to: CGPoint(x: 0, y: 10))
@@ -33,17 +33,18 @@ struct ChristmasLightView: View {
                                 .fill(colors[index % colors.count])
                                 .frame(width: bulbWidth, height: bulbHeight)
                                 .shadow(color: colors[index % colors.count],
-                                       radius: isGlowing ? 5 : 0)
+                                        radius: isGlowing ? 5 : 0)
                             
                             // Inner white glow
                             Ellipse()
                                 .fill(.white.opacity(isGlowing ? 0.6 : 0))
                                 .frame(width: bulbWidth/2, height: bulbHeight/2)
                                 .blur(radius: 2)
+                                .rotationEffect(Angle(degrees: Double.random(in: 0..<10)))
                         }
                         .animation(
                             Animation
-                                .easeInOut(duration: 1.0)
+                                .linear(duration: 1.0)
                                 .repeatForever()
                                 .delay(index % 2 == 0 ? 0 : 1),
                             value: isGlowing
@@ -53,7 +54,7 @@ struct ChristmasLightView: View {
                 .padding(.horizontal)
             }
         }
-        .frame(height: 25)
+        .frame(height: 20)
         .onAppear {
             isGlowing.toggle()
         }

@@ -33,26 +33,16 @@ struct MainView: View {
     }
     
     private var titleView: some View {
-        ZStack {
-            HStack(spacing: 0) {
-                ForEach(Array("Advent of Code".enumerated()), id: \.offset) { index, letter in
-                    Text(String(letter))
-                        .foregroundColor(index % 2 == 0 ? .green : .red)
-                        .fontDesign(.serif)
-                        .font(.largeTitle)
-                        .bold()
-                }
-            }
-            
-            VStack {
-                Spacer()
-                ChristmasLightView()
-                    .offset(y: -50)
+        HStack(spacing: 0) {
+            ForEach(Array("Advent of Code".enumerated()), id: \.offset) { index, letter in
+                Text(String(letter))
+                    .foregroundColor(index % 2 == 0 ? .green : .red)
+                    .fontDesign(.serif)
+                    .font(.largeTitle)
+                    .bold()
             }
         }
-        .frame(height: 64)
     }
-
 }
 
 #Preview {
