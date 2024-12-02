@@ -8,7 +8,7 @@
 import SwiftUI
 import WebKit
 
-struct PuzzleView: UIViewRepresentable {
+struct TodayView: UIViewRepresentable {
     let url: URL = URL(string: "https://adventofcode.com/2024/day/\(Calendar.current.component(.day, from: Date()))")!
 
     func makeUIView(context: Context) -> WKWebView {
