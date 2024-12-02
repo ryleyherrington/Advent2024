@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct AdventListView: View {
+struct MainView: View {
     private var adventDays: [AdventDay]
     @State private var showDay = false
     @State private var selectedDay: AdventDay?
@@ -13,18 +13,19 @@ struct AdventListView: View {
     }
     
     var body: some View {
-        VStack {
-            titleView
-            NavigationView {
+        NavigationView {
+            VStack {
+                titleView
+                
                 List(adventDays) { day in
                     NavigationLink(destination:
-                        Group {
-                            if let dayView = day.view {
-                                dayView
-                            } else {
-                                Text("View not available for Day \(day.day)")
-                            }
+                                    Group {
+                        if let dayView = day.view {
+                            dayView
+                        } else {
+                            Text("View not available for Day \(day.day)")
                         }
+                    }
                     ) {
                         Text("Day \(day.day): \(day.title)")
                     }
@@ -48,6 +49,6 @@ struct AdventListView: View {
 }
 
 #Preview {
-    AdventListView()
+    MainView()
 }
 

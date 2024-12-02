@@ -11,7 +11,7 @@ import SwiftUI
 struct Advent_of_CodeApp: App {
     var body: some Scene {
         WindowGroup {
-            AdventListView()
+            MainView()
         }
     }
 }
