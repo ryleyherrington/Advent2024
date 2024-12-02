@@ -11,7 +11,28 @@ import SwiftUI
 struct Advent_of_CodeApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+            AdventTabView()
         }
     }
+}
+
+struct AdventTabView: View {
+    var body: some View {
+        ZStack {
+            TabView {
+                MainView()
+                    .tabItem {
+                        Label("Days", systemImage: "list.dash")
+                    }
+                PuzzleView()
+                    .tabItem {
+                        Label("Info", systemImage: "calendar")
+                    }
+            }
+        }
+    }
+}
+
+#Preview {
+    AdventTabView()
 }
