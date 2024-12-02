@@ -29,6 +29,7 @@ struct AdventTabView: View {
                         Label("Info", systemImage: "calendar")
                     }
             }
+            .tint(.green)
         }
     }
 }
