@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct Day1View: AdventDayView {
-    let dayNumber = 1
     @Bindable var viewModel = Day1ViewModel()
-    
+    let dayNumber = 1
+
     var body: some View {
         VStack(spacing: 20) {
             exampleSection

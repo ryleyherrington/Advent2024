@@ -22,7 +22,7 @@ struct AdventDay: Identifiable {
 struct AdventDataSource {
     static let days: [AdventDay] = [
         AdventDay(day: 1, title: "Historian Hysteria", view: AnyView(Day1View())),
-        AdventDay(day: 2, title: ""),
+        AdventDay(day: 2, title: "Red-Nosed Reports",  view: AnyView(Day2View())),
         AdventDay(day: 3, title: ""),
         AdventDay(day: 4, title: ""),
         AdventDay(day: 5, title: ""),
