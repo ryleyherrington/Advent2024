@@ -38,6 +38,10 @@ struct Day1View: AdventDayView {
             Text("Total Distance:")
                 .bold()
             Text("\(viewModel.totalExample)")
+            
+            Text("Similarity")
+                .bold()
+            Text("\(viewModel.exampleSimilarity)")
         }
     }
     
@@ -47,6 +51,10 @@ struct Day1View: AdventDayView {
             Text("Total Distance:")
                 .bold()
             Text("\(viewModel.realDistance)")
+            Text("Similarity")
+                .bold()
+            Text("\(viewModel.realSimilarity)")
+
         }
     }
 }
@@ -63,6 +71,14 @@ final class Day1ViewModel {
     private var leftArray: [Int] = []
     private var rightArray: [Int] = []
     
+    var exampleSimilarity: Int {
+        findSimilarity(list1: example, list2: example2)
+    }
+    
+    var realSimilarity: Int {
+        findSimilarity(list1: leftArray, list2: rightArray)
+    }
+
     // MARK: - Initialization
     init() {
         loadData()
@@ -101,6 +117,14 @@ final class Day1ViewModel {
         let rightArray = stride(from: 1, to: allNumbers.count, by: 2).map { allNumbers[$0] }
         
         return (leftArray, rightArray)
+    }
+    
+    private func findSimilarity(list1: [Int], list2: [Int]) -> Int {
+        var similar = 0
+        for i in list1 {
+            similar += i * list2.count(where: {$0 == i})
+        }
+        return similar
     }
 }
 

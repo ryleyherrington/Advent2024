@@ -35,12 +35,15 @@ private extension Day2View {
                     .multilineTextAlignment(.center)
             }
             
-            VStack(spacing: 4) {
-                Text("Safe Reports:")
-                    .bold()
-                Text("\(viewModel.safeExampleReportsCount)")
-                    .multilineTextAlignment(.center)
-            }
+            Text("Safe Reports:")
+                .bold()
+            Text("\(viewModel.safeExampleReportsCount)")
+                .multilineTextAlignment(.center)
+            
+            Text("Part 2: The Dampening ")
+                .bold()
+            Text("\(viewModel.safe_ish_ExampleReportsCount)")
+                .multilineTextAlignment(.center)
         }
     }
     
@@ -48,11 +51,14 @@ private extension Day2View {
         VStack(alignment: .center, spacing: 12) {
             Text("Real Data")
                 .font(.title)
-            VStack(spacing: 4) {
-                Text("Total Safe Reports:")
-                    .bold()
-                Text("\(viewModel.safeRealReportsCount)")
-            }
+            Text("Total Safe Reports:")
+                .bold()
+            Text("\(viewModel.safeRealReportsCount)")
+            
+            Text("Part 2: The Dampening")
+                .bold()
+            Text("\(viewModel.safe_ish_RealReportsCount)")
+                .multilineTextAlignment(.center)
         }
     }
 }
@@ -84,10 +90,18 @@ final class Day2ViewModel {
         calculateSafeReportsCount(from: example)
     }
     
+    var safe_ish_ExampleReportsCount: Int {
+        calculateSafeReportsCount(from: example, dampened: true)
+    }
+    
     var safeRealReportsCount: Int {
         calculateSafeReportsCount(from: allReports)
     }
     
+    var safe_ish_RealReportsCount: Int {
+        calculateSafeReportsCount(from: allReports, dampened: true)
+    }
+
     // MARK: - Initialization
     init() {
         loadReports()
@@ -108,9 +122,14 @@ final class Day2ViewModel {
             }
     }
     
-    func calculateSafeReportsCount(from reports: [[Int]]) -> Int {
+    func calculateSafeReportsCount(from reports: [[Int]], dampened: Bool = false) -> Int {
         guard !reports.isEmpty else { return 0 }
-        return reports.reduce(0) { $0 + (isReportSafe($1) ? 1 : 0) }
+        if !dampened {
+            return reports.reduce(0) { $0 + (isReportSafe($1) ? 1 : 0) }
+        } else {
+            // for each report, see if by removing 1 value it would be safe
+            return reports.reduce(0) { $0 + (isReportSafeIsh($1) ? 1 : 0) }
+        }
     }
     
     func isReportSafe(_ report: [Int]) -> Bool {
@@ -122,6 +141,22 @@ final class Day2ViewModel {
             return difference >= Constants.minDifference &&
                    difference <= Constants.maxDifference
         }
+    }
+    
+    func isReportSafeIsh(_ report: [Int]) -> Bool {
+        if isReportSafe(report) {
+            return true
+        }
+        
+        // Try removing one value at a time and check if it becomes safe
+        for i in 0..<report.count {
+            var tempReport = report
+            tempReport.remove(at: i)
+            if isReportSafe(tempReport) {
+                return true
+            }
+        }
+        return false
     }
 }
 
