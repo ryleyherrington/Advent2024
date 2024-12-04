@@ -35,6 +35,7 @@ private extension Day4View {
             }
             Text("Found: \(viewModel.findXMAS(viewModel.example))")
             Text("Part 2").bold()
+            Text("Found: \(viewModel.findCrossMas(viewModel.example))")
         }
     }
     
@@ -42,8 +43,8 @@ private extension Day4View {
         VStack(alignment: .center, spacing: 12) {
             Text("Real Data").font(.title)
             Text("Found: \(viewModel.findXMAS(viewModel.real))")
-
             Text("Part 2:").bold()
+            Text("Found: \(viewModel.findCrossMas(viewModel.real))")
         }
     }
 }
@@ -77,7 +78,6 @@ final class Day4ViewModel {
               let content = try? String(contentsOfFile: path, encoding: .utf8) else {
             return
         }
-        //TODO
         real = content.components(separatedBy: .newlines)
                 .filter { !$0.isEmpty }
                 .map { Array($0).map(String.init) }
@@ -119,6 +119,45 @@ final class Day4ViewModel {
                     for dir in 0..<8 {
                         if checkWord(row, col, dir) {
                             count += 1
+                        }
+                    }
+                }
+            }
+        }
+        
+        return count
+    }
+    
+    func findCrossMas(_ game: [[String]]) -> Int {
+        let rows = game.count
+        let cols = game[0].count
+        var count = 0
+        
+        // Check each position that could be the center of an X
+        for row in 1..<(rows-1) {
+            for col in 1..<(cols-1) {
+                // Check if center is 'A'
+                if game[row][col] == "A" {
+                    // Check all possible M and S combinations in X pattern
+                    if (game[row-1][col-1] == "M" || game[row-1][col-1] == "S") &&
+                       (game[row-1][col+1] == "M" || game[row-1][col+1] == "S") &&
+                       (game[row+1][col-1] == "M" || game[row+1][col-1] == "S") &&
+                       (game[row+1][col+1] == "M" || game[row+1][col+1] == "S") {
+                        
+                        // Check diagonal pairs
+                        let topLeft = game[row-1][col-1]
+                        let topRight = game[row-1][col+1]
+                        let bottomLeft = game[row+1][col-1]
+                        let bottomRight = game[row+1][col+1]
+                        
+                        // Check top-left to bottom-right diagonal
+                        if (topLeft == "M" && bottomRight == "S") ||
+                           (topLeft == "S" && bottomRight == "M") {
+                            // Check if other diagonal also forms MS or SM
+                            if (topRight == "M" && bottomLeft == "S") ||
+                               (topRight == "S" && bottomLeft == "M") {
+                                count += 1
+                            }
                         }
                     }
                 }
