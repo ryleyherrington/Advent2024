@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - View
 struct Day3View: AdventDayView {
     @Bindable private var viewModel = Day3ViewModel()
-    let dayNumber = 2
+    let dayNumber = 3
     
     var body: some View {
         VStack(spacing: 20) {

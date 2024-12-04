@@ -24,7 +24,7 @@ struct AdventDataSource {
         AdventDay(day: 1, title: "Historian Hysteria", view: AnyView(Day1View())),
         AdventDay(day: 2, title: "Red-Nosed Reports",  view: AnyView(Day2View())),
         AdventDay(day: 3, title: "Mull It Over", view: AnyView(Day3View())),
-        AdventDay(day: 4, title: ""),
+        AdventDay(day: 4, title: "Ceres Search", view: AnyView(Day4View())),
         AdventDay(day: 5, title: ""),
         AdventDay(day: 6, title: ""),
         AdventDay(day: 7, title: ""),
