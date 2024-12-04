@@ -66,104 +66,105 @@ final class Day4ViewModel {
         ["M","X","M","X","A","X","M","A","S","X"]
     ]
     private(set) var real = [[String]]()
-
+    
     // MARK: - Initialization
     init() {
         loadReports()
     }
-    
-    // MARK: - Private Methods
-    private func loadReports() {
+}
+
+// MARK: - File Loading
+private extension Day4ViewModel {
+    func loadReports() {
         guard let path = Bundle.main.path(forResource: "day4", ofType: "txt"),
               let content = try? String(contentsOfFile: path, encoding: .utf8) else {
             return
         }
-        real = content.components(separatedBy: .newlines)
-                .filter { !$0.isEmpty }
-                .map { Array($0).map(String.init) }
+        real = parseGameBoard(content)
     }
     
+    func parseGameBoard(_ input: String) -> [[String]] {
+        input.components(separatedBy: .newlines)
+            .filter { !$0.isEmpty }
+            .map { Array($0).map(String.init) }
+    }
+}
+
+// MARK: - XMAS Search
+private extension Day4ViewModel {
+    struct GridPosition {
+        let row: Int
+        let col: Int
+    }
+    
+    struct Direction {
+        static let rows = [-1, -1, -1, 0, 0, 1, 1, 1]
+        static let cols = [-1, 0, 1, -1, 1, -1, 0, 1]
+    }
+    
+    func isValid(_ pos: GridPosition, rows: Int, cols: Int) -> Bool {
+        pos.row >= 0 && pos.row < rows && pos.col >= 0 && pos.col < cols
+    }
+}
+
+// MARK: - Public Methods
+extension Day4ViewModel {
     func findXMAS(_ game: [[String]]) -> Int {
         let rows = game.count
         let cols = game[0].count
         
-        // Direction vectors for all 8 possible directions
-        let dirRows = [-1, -1, -1, 0, 0, 1, 1, 1]
-        let dirCols = [-1, 0, 1, -1, 1, -1, 0, 1]
-        
-        func isValid(_ row: Int, _ col: Int) -> Bool {
-            return row >= 0 && row < rows && col >= 0 && col < cols
-        }
-        
-        func checkWord(_ row: Int, _ col: Int, _ direction: Int) -> Bool {
-            let word = "XMAS"
-            var currentRow = row
-            var currentCol = col
-            
-            for char in word {
-                if !isValid(currentRow, currentCol) ||
-                   game[currentRow][currentCol] != String(char) {
+        func checkWord(_ start: GridPosition, _ direction: Int) -> Bool {
+            var current = start
+            return "XMAS".allSatisfy { char in
+                guard isValid(current, rows: rows, cols: cols),
+                      game[current.row][current.col] == String(char) else {
                     return false
                 }
-                currentRow += dirRows[direction]
-                currentCol += dirCols[direction]
+                current = GridPosition(
+                    row: current.row + Direction.rows[direction],
+                    col: current.col + Direction.cols[direction]
+                )
+                return true
             }
-            return true
         }
         
         var count = 0
         for row in 0..<rows {
-            for col in 0..<cols {
-                if game[row][col] == "X" {
-                    // Check all 8 directions from this X
-                    for dir in 0..<8 {
-                        if checkWord(row, col, dir) {
-                            count += 1
-                        }
-                    }
-                }
+            for col in 0..<cols where game[row][col] == "X" {
+                count += (0..<8).filter { checkWord(GridPosition(row: row, col: col), $0) }.count
             }
         }
-        
         return count
     }
     
     func findCrossMas(_ game: [[String]]) -> Int {
         let rows = game.count
         let cols = game[0].count
-        var count = 0
         
-        // Check each position that could be the center of an X
+        func checkDiagonals(_ pos: GridPosition) -> Bool {
+            let corners = [
+                game[pos.row-1][pos.col-1],
+                game[pos.row-1][pos.col+1],
+                game[pos.row+1][pos.col-1],
+                game[pos.row+1][pos.col+1]
+            ]
+            
+            let isValidCorner = corners.allSatisfy { $0 == "M" || $0 == "S" }
+            guard isValidCorner else { return false }
+            
+            let (tl, tr, bl, br) = (corners[0], corners[1], corners[2], corners[3])
+            return ((tl == "M" && br == "S") || (tl == "S" && br == "M")) &&
+                   ((tr == "M" && bl == "S") || (tr == "S" && bl == "M"))
+        }
+        
+        var count = 0
         for row in 1..<(rows-1) {
-            for col in 1..<(cols-1) {
-                // Check if center is 'A'
-                if game[row][col] == "A" {
-                    // Check all possible M and S combinations in X pattern
-                    if (game[row-1][col-1] == "M" || game[row-1][col-1] == "S") &&
-                       (game[row-1][col+1] == "M" || game[row-1][col+1] == "S") &&
-                       (game[row+1][col-1] == "M" || game[row+1][col-1] == "S") &&
-                       (game[row+1][col+1] == "M" || game[row+1][col+1] == "S") {
-                        
-                        // Check diagonal pairs
-                        let topLeft = game[row-1][col-1]
-                        let topRight = game[row-1][col+1]
-                        let bottomLeft = game[row+1][col-1]
-                        let bottomRight = game[row+1][col+1]
-                        
-                        // Check top-left to bottom-right diagonal
-                        if (topLeft == "M" && bottomRight == "S") ||
-                           (topLeft == "S" && bottomRight == "M") {
-                            // Check if other diagonal also forms MS or SM
-                            if (topRight == "M" && bottomLeft == "S") ||
-                               (topRight == "S" && bottomLeft == "M") {
-                                count += 1
-                            }
-                        }
-                    }
+            for col in 1..<(cols-1) where game[row][col] == "A" {
+                if checkDiagonals(GridPosition(row: row, col: col)) {
+                    count += 1
                 }
             }
         }
-        
         return count
     }
 }
