@@ -8,9 +8,9 @@
 import SwiftUI
 import WebKit
 
-struct TodayView: UIViewRepresentable {
+struct TodayWebView: UIViewRepresentable {
     let url: URL = URL(string: "https://adventofcode.com/2024/day/\(Calendar.current.component(.day, from: Date()))")!
-
+    
     func makeUIView(context: Context) -> WKWebView {
         return WKWebView()
     }

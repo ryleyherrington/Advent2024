@@ -24,7 +24,7 @@ struct AdventTabView: View {
                     .tabItem {
                         Label("Days", systemImage: "list.dash")
                     }
-                TodayView()
+                TodayWebView()
                     .tabItem {
                         Label("Info", systemImage: "calendar")
                     }
