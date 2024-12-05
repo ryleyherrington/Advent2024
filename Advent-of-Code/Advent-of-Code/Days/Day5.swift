@@ -66,7 +66,7 @@ final class Day5ViewModel {
     47|29
     75|13
     53|13
-
+    
     75,47,61,53,29
     97,61,53,29,13
     75,29,13
@@ -97,7 +97,7 @@ private extension Day5ViewModel {
         
         real = content
     }
-
+    
     func parseInput(_ input: String) -> (rules: [Rule], updates: [[Int]]) {
         let sections = input.components(separatedBy: "\n\n")
         guard sections.count == 2 else {
@@ -143,7 +143,7 @@ private extension Day5ViewModel {
         }
         return true
     }
-
+    
     func findMiddleNumbers(_ input: String) -> Int {
         let (rules, updates) = parseInput(input)
         
