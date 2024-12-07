@@ -116,8 +116,7 @@ private extension Day6ViewModel {
         guard let currentPos = startPosition else { return 0 }
         
         func isInBounds(_ point: Point) -> Bool {
-            return point.y >= 0 && point.y < height &&
-            point.x >= 0 && point.x < width
+            return point.y >= 0 && point.y < height && point.x >= 0 && point.x < width
         }
         
         func hasObstacle(_ point: Point) -> Bool {
