@@ -28,6 +28,6 @@ struct AdventDataSource {
         AdventDay(day: 5, title: "Print Queue", view: AnyView(Day5View())),
         AdventDay(day: 6, title: "Guard Gallivant", view: AnyView(Day6View())),
         AdventDay(day: 7, title: "Bridge Repair", view: AnyView(Day7View())),
-        AdventDay(day: 8, title: "", view: AnyView(Day8View())),
+        AdventDay(day: 8, title: "Resonant Collinearity", view: AnyView(Day8View())),
     ]
 }
