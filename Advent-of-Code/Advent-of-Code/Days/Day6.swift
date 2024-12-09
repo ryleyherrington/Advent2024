@@ -64,7 +64,7 @@ final class Day6ViewModel {
     }
 }
 
-struct Point: Hashable {
+struct Day6Point: Hashable {
     let x: Int
     let y: Int
 }
@@ -81,12 +81,12 @@ enum Direction {
         }
     }
     
-    func move(_ point: Point) -> Point {
+    func move(_ point: Day6Point) -> Day6Point {
         switch self {
-        case .up: return Point(x: point.x, y: point.y - 1)
-        case .right: return Point(x: point.x + 1, y: point.y)
-        case .down: return Point(x: point.x, y: point.y + 1)
-        case .left: return Point(x: point.x - 1, y: point.y)
+        case .up: return Day6Point(x: point.x, y: point.y - 1)
+        case .right: return Day6Point(x: point.x + 1, y: point.y)
+        case .down: return Day6Point(x: point.x, y: point.y + 1)
+        case .left: return Day6Point(x: point.x - 1, y: point.y)
         }
     }
 }
@@ -109,22 +109,22 @@ private extension Day6ViewModel {
         // Find starting position and direction
         let startPosition = grid.enumerated().flatMap { y, row in
             row.enumerated().compactMap { x, char in
-                char == "^" ? Point(x: x, y: y) : nil
+                char == "^" ? Day6Point(x: x, y: y) : nil
             }
         }.first
         
         guard let currentPos = startPosition else { return 0 }
         
-        func isInBounds(_ point: Point) -> Bool {
+        func isInBounds(_ point: Day6Point) -> Bool {
             return point.y >= 0 && point.y < height && point.x >= 0 && point.x < width
         }
         
-        func hasObstacle(_ point: Point) -> Bool {
+        func hasObstacle(_ point: Day6Point) -> Bool {
             guard isInBounds(point) else { return true }
             return grid[point.y][point.x] == "#"
         }
         
-        func nextState(_ state: (Point, Direction, Set<Point>)) -> (Point, Direction, Set<Point>)? {
+        func nextState(_ state: (Day6Point, Direction, Set<Day6Point>)) -> (Day6Point, Direction, Set<Day6Point>)? {
             let (pos, dir, visited) = state
             let nextPos = dir.move(pos)
             
@@ -139,8 +139,8 @@ private extension Day6ViewModel {
             }
         }
         
-        var visited = Set<Point>([currentPos])
-        var state: (Point, Direction, Set<Point>) = (currentPos, .up, visited)
+        var visited = Set<Day6Point>([currentPos])
+        var state: (Day6Point, Direction, Set<Day6Point>) = (currentPos, .up, visited)
         
         while let newState = nextState(state) {
             state = newState
@@ -159,14 +159,14 @@ private extension Day6ViewModel {
         let start = grid.enumerated()
             .flatMap { y, row in
                 row.enumerated().compactMap { x, char in
-                    char == "^" ? Point(x: x, y: y) : nil
+                    char == "^" ? Day6Point(x: x, y: y) : nil
                 }
             }
             .first!
             
         // Calculate initial path first
-        func calculateInitialPath() -> Set<Point> {
-            var visited = Set<Point>()
+        func calculateInitialPath() -> Set<Day6Point> {
+            var visited = Set<Day6Point>()
             var pos = start
             var dir: Direction = .up
             
@@ -185,7 +185,7 @@ private extension Day6ViewModel {
             return visited
         }
         
-        func isInBounds(_ point: Point) -> Bool {
+        func isInBounds(_ point: Day6Point) -> Bool {
             point.y >= 0 && point.y < height && point.x >= 0 && point.x < width
         }
         
